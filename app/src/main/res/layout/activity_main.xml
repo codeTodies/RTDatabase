@@ -24,8 +24,4 @@
         android:backgroundTint="@color/lavender"
         android:tint="@color/white"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="play_song"/>
 </RelativeLayout>
