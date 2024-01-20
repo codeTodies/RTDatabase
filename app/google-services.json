@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "393819748306",
+    "project_id": "rt-database-de485",
+    "storage_bucket": "rt-database-de485.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393819748306:android:f84821e0f18daac465fa0b",
+        "android_client_info": {
+          "package_name": "com.example.rtdatabase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZXYY2lOCifW1HeniIHMq3vLED_ncR9-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
