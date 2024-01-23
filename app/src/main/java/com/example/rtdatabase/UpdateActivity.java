@@ -3,10 +3,10 @@ package com.example.rtdatabase;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -19,100 +19,125 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class UploadActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity {
 
-    ImageView uploadImage;
-    Button saveButton;
-    TextView uploadFile;
-    EditText uploadTopic, uploadDesc, uploadLang;
-    String imageURL,audioURL;
+    ImageView updateImage;
+    Button updateBtn;
+    Button updateFile;
+    EditText updateDesc, updateTitle, updateLang;
+    String title,desc,lang;
+    String imageURL, audioURL;
     Uri uri,uriAu;
+    DatabaseReference databaseReference;
+    StorageReference storageReference;
+    String key,oldImageURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
-        uploadImage=findViewById(R.id.uploadImage);
-        uploadDesc=findViewById(R.id.uploadDesc);
-        uploadLang=findViewById(R.id.uploadLang);
-        uploadTopic=findViewById(R.id.uploadTopic);
-        saveButton=findViewById(R.id.saveButton);
-        uploadFile=findViewById(R.id.btnUploadFile);
+        setContentView(R.layout.activity_update);
+        updateBtn=findViewById(R.id.updateButton);
+        updateDesc=findViewById(R.id.updateDesc);
+        updateImage=findViewById(R.id.updateImage);
+        updateLang=findViewById(R.id.updateLang);
+        updateTitle=findViewById(R.id.updateTopic);
+        updateFile=findViewById(R.id.btnUpdateFile);
         ActivityResultLauncher<Intent> activityResultLauncher=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult o) {
-                        if(o.getResultCode()== Activity.RESULT_OK){
+                        if(o.getResultCode()== Activity.RESULT_OK)
+                        {
                             Intent data=o.getData();
                             uri=data.getData();
-                            uploadImage.setImageURI(uri);
+                            updateImage.setImageURI(uri);
                         }
                         else {
-                            Toast.makeText(UploadActivity.this,"No Image selected",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateActivity.this,"No image selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
         );
+
         ActivityResultLauncher<Intent> activityResultLauncherAu=registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult o) {
-                        if(o.getResultCode()== Activity.RESULT_OK){
+                        if(o.getResultCode()== Activity.RESULT_OK)
+                        {
                             Intent data=o.getData();
                             uriAu=data.getData();
                         }
                         else {
-                            Toast.makeText(UploadActivity.this,"No File selected",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateActivity.this,"No audio selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
         );
-        uploadImage.setOnClickListener(new View.OnClickListener() {
+
+        Bundle bundle=getIntent().getExtras();
+        if(bundle!=null)
+        {
+            Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
+            updateTitle.setText(bundle.getString("Title"));
+            updateLang.setText(bundle.getString("Language"));
+            updateDesc.setText(bundle.getString("Description"));
+            key=bundle.getString("Key");
+            oldImageURL=bundle.getString("Image");
+            audioURL=bundle.getString("Audio");
+        }
+        databaseReference= FirebaseDatabase.getInstance().getReference("dtb").child(key);
+        updateFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photopicker=new Intent(Intent.ACTION_GET_CONTENT);
-                photopicker.setType("image/*");
-                activityResultLauncher.launch(photopicker);
+                Intent photo=new Intent(Intent.ACTION_GET_CONTENT);
+                photo.setType("audio/*");
+                activityResultLauncherAu.launch(photo);
             }
         });
-        uploadFile.setOnClickListener(new View.OnClickListener() {
+        updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photopicker=new Intent(Intent.ACTION_GET_CONTENT);
-                photopicker.setType("audio/*");
-                activityResultLauncherAu.launch(photopicker);
+                Intent photo=new Intent(Intent.ACTION_GET_CONTENT);
+                photo.setType("image/*");
+                activityResultLauncher.launch(photo);
             }
         });
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveData();
+                Intent intent=new Intent(UpdateActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
     }
-    public void saveData(){
-        StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("Android Images")
-                .child(uri.getLastPathSegment());
-        AlertDialog.Builder builder=new AlertDialog.Builder(UploadActivity.this);
+
+
+    public void saveData()
+    {
+        storageReference= FirebaseStorage.getInstance().getReference("Android Images").child(uri.getLastPathSegment());
+        AlertDialog.Builder builder=new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog= builder.create();
         dialog.show();
-//        UploadData();
         storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -121,7 +146,7 @@ public class UploadActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         imageURL = uri.toString();
-                        UploadData();
+                        UpdateData();
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -138,8 +163,10 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
 
+
+
         StorageReference storageReferenceAu= FirebaseStorage.getInstance().getReference().child("Audio")
-                .child(uri.getLastPathSegment());
+                .child(uriAu.getLastPathSegment());
         storageReferenceAu.putFile(uriAu).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -148,7 +175,7 @@ public class UploadActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         audioURL = uri.toString();
-                        UploadData();
+                        UpdateData();
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -164,30 +191,32 @@ public class UploadActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-    }
-    public void UploadData()
-    {
-        String title=uploadTopic.getText().toString();
-        String desc=uploadDesc.getText().toString();
-        String lang =uploadLang.getText().toString();
-        Data data=new Data(title,desc,lang,imageURL,audioURL);
 
-        String currentDay= DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("dtb");
-        databaseReference.child(currentDay).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-        @Override
-        public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful())
-            {
-                Toast.makeText(UploadActivity.this,"Saved",Toast.LENGTH_SHORT).show();
-                finish();
+    }
+    public void UpdateData()
+    {
+        String title=updateTitle.getText().toString();
+        String desc=updateDesc.getText().toString();
+        String lang =updateLang.getText().toString();
+
+        Data data= new Data(title,desc,lang,imageURL,audioURL);
+        
+        databaseReference.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    StorageReference ref=FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+                    ref.delete();
+                    Toast.makeText(UpdateActivity.this,"Updated",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
-        }
-    }).addOnFailureListener(new OnFailureListener() {
-        @Override
-        public void onFailure(@NonNull Exception e) {
-            Toast.makeText(UploadActivity.this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-        }
-    });
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UpdateActivity.this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

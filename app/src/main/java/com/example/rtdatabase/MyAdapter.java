@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -68,9 +69,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
             public void onClick(View v) {
                 Intent intent=new Intent(context,DetailActivity.class);
                 intent.putExtra("Image",dataList.get(holder.getAdapterPosition()).getDataImage());
+                intent.putExtra("Audio",dataList.get(holder.getAdapterPosition()).getDataAudio());
                 intent.putExtra("Description",dataList.get(holder.getAdapterPosition()).getDataDesc());
                 intent.putExtra("Title",dataList.get(holder.getAdapterPosition()).getDataTitle());
-
+                intent.putExtra("Language",dataList.get(holder.getAdapterPosition()).getDataLang());
+                intent.putExtra("Key",dataList.get(holder.getAdapterPosition()).getKey());
                 context.startActivity(intent);
             }
         });
@@ -79,6 +82,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+    public void searchDataLst(ArrayList<Data> searchList)
+    {
+        dataList=searchList;
+        notifyDataSetChanged();
     }
 }
 class MyViewHolder extends RecyclerView.ViewHolder{

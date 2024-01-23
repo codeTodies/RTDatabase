@@ -6,7 +6,17 @@ public class Data {
     public String dataLang;
     public String dataImage;
     public String dataAudio;
-    public Data(String dataTitle,String dataDesc, String dataLang,String dataImage,String dataAudio) {
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Data(String dataTitle, String dataDesc, String dataLang, String dataImage, String dataAudio) {
         this.dataDesc = dataDesc;
         this.dataImage=dataImage;
         this.dataTitle=dataTitle;

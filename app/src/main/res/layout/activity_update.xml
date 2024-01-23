@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UploadActivity">
+    tools:context=".UpdateActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -28,26 +28,26 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Upload data"
+                android:text="Update data"
                 android:textAlignment="center"
                 android:textColor="@color/lavender"
                 android:textSize="30sp" />
 
             <ImageView
-                android:id="@+id/uploadImage"
+                android:id="@+id/updateImage"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/img" />
-            <TextView
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SELECT FILE"
                 android:layout_gravity="center"
-                android:id="@+id/btnUploadFile"/>
+                android:id="@+id/btnUpdateFile"/>
 
             <EditText
-                android:id="@+id/uploadTopic"
+                android:id="@+id/updateTopic"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
@@ -59,7 +59,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/uploadDesc"
+                android:id="@+id/updateDesc"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="20dp"
@@ -71,7 +71,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/uploadLang"
+                android:id="@+id/updateLang"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="20dp"
@@ -83,11 +83,11 @@
                 android:textSize="16sp" />
 
             <Button
-                android:id="@+id/saveButton"
+                android:id="@+id/updateButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
-                android:text="Save"
+                android:text="Update"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
         </LinearLayout>
