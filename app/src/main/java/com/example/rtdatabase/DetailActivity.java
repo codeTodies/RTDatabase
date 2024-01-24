@@ -1,5 +1,7 @@
 package com.example.rtdatabase;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -97,6 +99,20 @@ public class DetailActivity extends AppCompatActivity {
             }
 
         });
+        OnBackPressedDispatcher dispatcher = this.getOnBackPressedDispatcher();
+        // Create a callback that handles the back button
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Your custom logic here
+
+                Intent intent=new Intent(DetailActivity.this,MainActivity.class);
+                mediaPlayer.stop();
+                startActivity(intent);
+            }
+        };
+        // Register the callback to the dispatcher
+        dispatcher.addCallback(this, callback);
         mediaPlayer.setLooping(true); // lap lai
         mediaPlayer.seekTo(0);
         mediaPlayer.setVolume(0.5f, 0.5f); // am luong
@@ -105,13 +121,29 @@ public class DetailActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(DetailActivity.this,DetailActivity.class);
+                // put the data of the current item as extras
+                intent.putExtra("Audio",bundle.getString("AudioN"));
+                intent.putExtra("Description",bundle.getString("DescriptionN"));
+                intent.putExtra("Title",bundle.getString("TitleN"));
+                intent.putExtra("Language",bundle.getString("LanguageN"));
+                intent.putExtra("Key",bundle.getString("KeyN"));
+                mediaPlayer.stop();
+                startActivity(intent);
             }
         });
         previousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(DetailActivity.this,DetailActivity.class);
+                // put the data of the current item as extras
+                intent.putExtra("Audio",bundle.getString("AudioP"));
+                intent.putExtra("Description",bundle.getString("DescriptionP"));
+                intent.putExtra("Title",bundle.getString("TitleP"));
+                intent.putExtra("Language",bundle.getString("LanguageP"));
+                intent.putExtra("Key",bundle.getString("KeyP"));
+                mediaPlayer.stop();
+                startActivity(intent);
             }
         });
         // thanh am luong
@@ -218,5 +250,6 @@ public class DetailActivity extends AppCompatActivity {
         int seconds = time / 1000 % 60;
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
     }
+
 
 }

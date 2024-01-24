@@ -65,26 +65,58 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent=new Intent(context,DetailActivity.class);
-//                    intent.putExtra("Image",dataList.get(holder.getAdapterPosition()).getDataImage());
-                    intent.putExtra("Audio",dataList.get(holder.getAdapterPosition()).getDataAudio());
-                    intent.putExtra("Description",dataList.get(holder.getAdapterPosition()).getDataArt());
-                    intent.putExtra("Title",dataList.get(holder.getAdapterPosition()).getDataTitle());
-                    intent.putExtra("Language",dataList.get(holder.getAdapterPosition()).getDataAlbum());
-                    intent.putExtra("Key",dataList.get(holder.getAdapterPosition()).getKey());
-
-//                    intent.putExtra("ImageN",dataList.get(holder.getAdapterPosition()+1).getDataImage());
-
-
-//                    intent.putExtra("AudioN",dataList.get(holder.getAdapterPosition()+1).getDataAudio());
-//                    intent.putExtra("DescriptionN",dataList.get(holder.getAdapterPosition()+1).getDataDesc());
-//                    intent.putExtra("TitleN",dataList.get(holder.getAdapterPosition()+1).getDataTitle());
-//                    intent.putExtra("LanguageN",dataList.get(holder.getAdapterPosition()+1).getDataLang());
-//                    intent.putExtra("KeyN",dataList.get(holder.getAdapterPosition()+1).getKey());
-                    context.startActivity(intent);
-
+                // get the current position of the item
+                int position = holder.getAdapterPosition();
+                // get the next and previous positions
+                int nextPosition = position + 1;
+                int prevPosition = position - 1;
+                // create an intent to start DetailActivity
+                Intent intent=new Intent(context,DetailActivity.class);
+                // put the data of the current item as extras
+                intent.putExtra("Audio",dataList.get(position).getDataAudio());
+                intent.putExtra("Description",dataList.get(position).getDataArt());
+                intent.putExtra("Title",dataList.get(position).getDataTitle());
+                intent.putExtra("Language",dataList.get(position).getDataAlbum());
+                intent.putExtra("Key",dataList.get(position).getKey());
+                // check if the next position is valid
+                if (nextPosition < dataList.size()) {
+                    // put the data of the next item as extras
+                    intent.putExtra("AudioN",dataList.get(nextPosition).getDataAudio());
+                    intent.putExtra("DescriptionN",dataList.get(nextPosition).getDataArt());
+                    intent.putExtra("TitleN",dataList.get(nextPosition).getDataTitle());
+                    intent.putExtra("LanguageN",dataList.get(nextPosition).getDataAlbum());
+                    intent.putExtra("KeyN",dataList.get(nextPosition).getKey());
+                }
+                if(nextPosition==dataList.size())
+                {
+                    intent.putExtra("AudioN",dataList.get(0).getDataAudio());
+                    intent.putExtra("DescriptionN",dataList.get(0).getDataArt());
+                    intent.putExtra("TitleN",dataList.get(0).getDataTitle());
+                    intent.putExtra("LanguageN",dataList.get(0).getDataAlbum());
+                    intent.putExtra("KeyN",dataList.get(0).getKey());
+                }
+                // check if the previous position is valid
+                if (prevPosition >= 0) {
+                    // put the data of the previous item as extras
+                    intent.putExtra("AudioP",dataList.get(prevPosition).getDataAudio());
+                    intent.putExtra("DescriptionP",dataList.get(prevPosition).getDataArt());
+                    intent.putExtra("TitleP",dataList.get(prevPosition).getDataTitle());
+                    intent.putExtra("LanguageP",dataList.get(prevPosition).getDataAlbum());
+                    intent.putExtra("KeyP",dataList.get(prevPosition).getKey());
+                }
+                if (prevPosition<0)
+                {
+                    intent.putExtra("AudioP",dataList.get(dataList.size()-1).getDataAudio());
+                    intent.putExtra("DescriptionP",dataList.get(dataList.size()-1).getDataArt());
+                    intent.putExtra("TitleP",dataList.get(dataList.size()-1).getDataTitle());
+                    intent.putExtra("LanguageP",dataList.get(dataList.size()-1).getDataAlbum());
+                    intent.putExtra("KeyP",dataList.get(dataList.size()-1).getKey());
+                }
+                // start the activity with the intent
+                context.startActivity(intent);
             }
         });
+
     }
 
     @Override

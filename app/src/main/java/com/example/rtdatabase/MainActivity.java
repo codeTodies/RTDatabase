@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         searchView.clearFocus();
         GridLayoutManager gridLayoutManager= new GridLayoutManager(MainActivity.this,1);
         recyclerView.setLayoutManager(gridLayoutManager);
-
         AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
