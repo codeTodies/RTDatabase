@@ -45,7 +45,7 @@
         android:layout_width="308dp"
         android:layout_height="198dp"
         android:layout_marginTop="30dp"
-        android:src="@drawable/img" />
+        android:src="@drawable/img_1" />
 
     <SeekBar
         android:id="@+id/seekBarTime"
@@ -97,7 +97,7 @@
             android:layout_height="65dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="76dp"
-            android:background="@drawable/ic_play"
+            android:background="@drawable/ic_pause"
             android:contentDescription="Play/Pause Button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

@@ -1,22 +1,18 @@
 package com.example.rtdatabase;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,20 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
     TextView detailDesc, detailTitle, detailLang;
     Button detailPLay;
-    ImageView detailImage;
+//    ImageView detailImage;
     TextView tvDuration,tvTime;
-
     ImageView nextBtn, previousBtn;
     SeekBar seekBarTime;
     SeekBar seekBarVolume;
@@ -45,8 +36,6 @@ public class DetailActivity extends AppCompatActivity {
     String key="";
     String imageURL="";
     String audioURL="";
-    Handler handler=new Handler();
-    private MutableLiveData<Integer> currentPosition = new MutableLiveData<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
         tvTime = findViewById(R.id.tvTime);
         detailDesc=findViewById(R.id.detailDesc);
         detailTitle=findViewById(R.id.detailTitle);
-        detailImage=findViewById(R.id.detailImage);
+//        detailImage=findViewById(R.id.detailImage);
         detailLang=findViewById(R.id.detailLang);
         deleteBtn=findViewById(R.id.deleteBtn);
         editBtn=findViewById(R.id.EditBtn);
@@ -71,9 +60,9 @@ public class DetailActivity extends AppCompatActivity {
             detailTitle.setText(bundle.getString("Title"));
             detailLang.setText(bundle.getString("Language"));
             key=bundle.getString("Key");
-            imageURL=bundle.getString("Image");
+//            imageURL=bundle.getString("Image");
             audioURL=bundle.getString("Audio");
-            Glide.with(this).load(bundle.getString("Image")).into(detailImage);
+//            Glide.with(this).load(bundle.getString("Image")).into(detailImage);
         }
 
         MediaPlayer mediaPlayer=new MediaPlayer();
@@ -113,8 +102,18 @@ public class DetailActivity extends AppCompatActivity {
         mediaPlayer.setVolume(0.5f, 0.5f); // am luong
         String duration = millisecondsToString(mediaPlayer.getDuration());
         tvDuration.setText(duration);
-        nextBtn.setOnClickListener(v -> playNextSong());
-        previousBtn.setOnClickListener(v -> playPreviousSong());
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        previousBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         // thanh am luong
         seekBarVolume.setProgress(50);
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -177,22 +176,23 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final DatabaseReference reference= FirebaseDatabase.getInstance().getReference("dtb");
                 FirebaseStorage storage=FirebaseStorage.getInstance();
-                StorageReference storageReference=storage.getReferenceFromUrl(imageURL);
-                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        reference.child(key).removeValue();
-                        Toast.makeText(DetailActivity.this,"Delete Success",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        finish();
-                    }
-                });
+//                StorageReference storageReference=storage.getReferenceFromUrl(imageURL);
+//                storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        reference.child(key).removeValue();
+//                        Toast.makeText(DetailActivity.this,"Delete Success",Toast.LENGTH_SHORT).show();
+//                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                        finish();
+//                    }
+//                });
                 StorageReference storageReferenceAu=storage.getReferenceFromUrl(audioURL);
                 storageReferenceAu.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         reference.child(key).removeValue();
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        Toast.makeText(DetailActivity.this,"Delete Success",Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
@@ -205,7 +205,7 @@ public class DetailActivity extends AppCompatActivity {
                         .putExtra("Title",detailTitle.getText().toString())
                         .putExtra("Description",detailDesc.getText().toString())
                         .putExtra("Language",detailLang.getText().toString())
-                        .putExtra("Image",imageURL)
+//                        .putExtra("Image",imageURL)
                         .putExtra("Audio",audioURL)
                         .putExtra("Key",key);
                 startActivity(intent);
@@ -219,11 +219,4 @@ public class DetailActivity extends AppCompatActivity {
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
     }
 
-    private void playNextSong() {
-
-    }
-
-    private void playPreviousSong() {
-
-    }
 }

@@ -40,6 +40,7 @@ public class UpdateActivity extends AppCompatActivity {
     Button updateBtn;
     Button updateFile;
     EditText updateDesc, updateTitle, updateLang;
+    TextView file;
     String title,desc,lang;
     String imageURL, audioURL;
     Uri uri,uriAu;
@@ -52,7 +53,8 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
         updateBtn=findViewById(R.id.updateButton);
         updateDesc=findViewById(R.id.updateDesc);
-        updateImage=findViewById(R.id.updateImage);
+        file=findViewById(R.id.fileUpdated);
+//        updateImage=findViewById(R.id.updateImage);
         updateLang=findViewById(R.id.updateLang);
         updateTitle=findViewById(R.id.updateTopic);
         updateFile=findViewById(R.id.btnUpdateFile);
@@ -83,6 +85,7 @@ public class UpdateActivity extends AppCompatActivity {
                         {
                             Intent data=o.getData();
                             uriAu=data.getData();
+                            file.setText("b");
                         }
                         else {
                             Toast.makeText(UpdateActivity.this,"No audio selected", Toast.LENGTH_SHORT).show();
@@ -94,7 +97,7 @@ public class UpdateActivity extends AppCompatActivity {
         Bundle bundle=getIntent().getExtras();
         if(bundle!=null)
         {
-            Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
+//            Glide.with(UpdateActivity.this).load(bundle.getString("Image")).into(updateImage);
             updateTitle.setText(bundle.getString("Title"));
             updateLang.setText(bundle.getString("Language"));
             updateDesc.setText(bundle.getString("Description"));
@@ -111,14 +114,14 @@ public class UpdateActivity extends AppCompatActivity {
                 activityResultLauncherAu.launch(photo);
             }
         });
-        updateImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photo=new Intent(Intent.ACTION_GET_CONTENT);
-                photo.setType("image/*");
-                activityResultLauncher.launch(photo);
-            }
-        });
+//        updateImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent photo=new Intent(Intent.ACTION_GET_CONTENT);
+//                photo.setType("image/*");
+//                activityResultLauncher.launch(photo);
+//            }
+//        });
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,36 +135,36 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void saveData()
     {
-        storageReference= FirebaseStorage.getInstance().getReference("Android Images").child(uri.getLastPathSegment());
+//        storageReference= FirebaseStorage.getInstance().getReference("Android Images").child(uri.getLastPathSegment());
         AlertDialog.Builder builder=new AlertDialog.Builder(UpdateActivity.this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);
         AlertDialog dialog= builder.create();
         dialog.show();
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        imageURL = uri.toString();
-                        UpdateData();
-                        dialog.dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        dialog.dismiss();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                dialog.dismiss();
-            }
-        });
+//        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        imageURL = uri.toString();
+//                        UpdateData();
+//                        dialog.dismiss();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                dialog.dismiss();
+//            }
+//        });
 
 
 
@@ -199,15 +202,15 @@ public class UpdateActivity extends AppCompatActivity {
         String desc=updateDesc.getText().toString();
         String lang =updateLang.getText().toString();
 
-        Data data= new Data(title,desc,lang,imageURL,audioURL);
+        Data data= new Data(title,desc,lang,audioURL);
         
         databaseReference.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
                 {
-                    StorageReference ref=FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
-                    ref.delete();
+//                    StorageReference ref=FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL);
+//                    ref.delete();
                     Toast.makeText(UpdateActivity.this,"Updated",Toast.LENGTH_SHORT).show();
                     finish();
                 }

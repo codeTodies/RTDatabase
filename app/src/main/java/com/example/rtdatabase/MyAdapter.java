@@ -6,8 +6,10 @@ import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,42 +41,48 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
-        holder.recTitle.setText(dataList.get(position).getDataTitle());
-        holder.recDesc.setText(dataList.get(position).getDataDesc());
-        holder.recLang.setText(dataList.get(position).getDataLang());
         String link=dataList.get(position).getDataAudio();
-        holder.play_song.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    MediaPlayer mediaPlayer=new MediaPlayer();
-                    try
-                    {
-                        mediaPlayer.setDataSource(link);
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.start();
-                            }
-                        });
-                        mediaPlayer.prepare();
-                    }
-                    catch (IOException e){
-                        e.printStackTrace();
-                    }
+        MediaPlayer mediaPlayer=new MediaPlayer();
+        try
+        {
+            mediaPlayer.setDataSource(link);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.pause();
                 }
-        });
+            });
+            mediaPlayer.prepare();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+//        Glide.with(context).load(dataList.get(position).getDataImage()).into(holder.recImage);
+        holder.recTitle.setText(dataList.get(position).getDataTitle());
+        holder.recDesc.setText(dataList.get(position).getDataArt());
+        holder.recLang.setText(dataList.get(position).getDataAlbum());
+        holder.recDuration.setText(millisecondsToString(mediaPlayer.getDuration()));
         holder.recCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,DetailActivity.class);
-                intent.putExtra("Image",dataList.get(holder.getAdapterPosition()).getDataImage());
-                intent.putExtra("Audio",dataList.get(holder.getAdapterPosition()).getDataAudio());
-                intent.putExtra("Description",dataList.get(holder.getAdapterPosition()).getDataDesc());
-                intent.putExtra("Title",dataList.get(holder.getAdapterPosition()).getDataTitle());
-                intent.putExtra("Language",dataList.get(holder.getAdapterPosition()).getDataLang());
-                intent.putExtra("Key",dataList.get(holder.getAdapterPosition()).getKey());
-                context.startActivity(intent);
+                    Intent intent=new Intent(context,DetailActivity.class);
+//                    intent.putExtra("Image",dataList.get(holder.getAdapterPosition()).getDataImage());
+                    intent.putExtra("Audio",dataList.get(holder.getAdapterPosition()).getDataAudio());
+                    intent.putExtra("Description",dataList.get(holder.getAdapterPosition()).getDataArt());
+                    intent.putExtra("Title",dataList.get(holder.getAdapterPosition()).getDataTitle());
+                    intent.putExtra("Language",dataList.get(holder.getAdapterPosition()).getDataAlbum());
+                    intent.putExtra("Key",dataList.get(holder.getAdapterPosition()).getKey());
+
+//                    intent.putExtra("ImageN",dataList.get(holder.getAdapterPosition()+1).getDataImage());
+
+
+//                    intent.putExtra("AudioN",dataList.get(holder.getAdapterPosition()+1).getDataAudio());
+//                    intent.putExtra("DescriptionN",dataList.get(holder.getAdapterPosition()+1).getDataDesc());
+//                    intent.putExtra("TitleN",dataList.get(holder.getAdapterPosition()+1).getDataTitle());
+//                    intent.putExtra("LanguageN",dataList.get(holder.getAdapterPosition()+1).getDataLang());
+//                    intent.putExtra("KeyN",dataList.get(holder.getAdapterPosition()+1).getKey());
+                    context.startActivity(intent);
+
             }
         });
     }
@@ -88,21 +96,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         dataList=searchList;
         notifyDataSetChanged();
     }
+    public String millisecondsToString(int time) {
+        int minutes = time / 1000 / 60;
+        int seconds = time / 1000 % 60;
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    }
 }
 class MyViewHolder extends RecyclerView.ViewHolder{
 
-    ImageView recImage;
-    TextView recTitle, recLang, recDesc;
-    CardView recCard;
-    Button play_song;
+//    ImageView recImage;
+    TextView recTitle, recLang, recDesc,recDuration;
+    LinearLayout recCard;
     public MyViewHolder(@NonNull View v)
     {
         super(v);
-        play_song=v.findViewById(R.id.play_Songs);
-        recImage=v.findViewById(R.id.recImage);
+//        recImage=v.findViewById(R.id.recImage);
         recTitle=v.findViewById(R.id.recTitle);
         recLang=v.findViewById(R.id.recLang);
         recDesc=v.findViewById(R.id.recDesc);
         recCard=v.findViewById(R.id.recCard);
+        recDuration=v.findViewById(R.id.recDuration);
     }
 }

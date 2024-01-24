@@ -2,8 +2,8 @@ package com.example.rtdatabase;
 
 public class Data {
     public String dataTitle;
-    public String dataDesc;
-    public String dataLang;
+    public String dataArt;
+    public String dataAlbum;
     public String dataImage;
     public String dataAudio;
     private String key;
@@ -16,29 +16,28 @@ public class Data {
         this.key = key;
     }
 
-    public Data(String dataTitle, String dataDesc, String dataLang, String dataImage, String dataAudio) {
-        this.dataDesc = dataDesc;
-        this.dataImage=dataImage;
+    public Data(String dataTitle, String dataArt, String dataAlbum, String dataAudio) {
+        this.dataArt = dataArt;
+//        this.dataImage=dataImage;
         this.dataTitle=dataTitle;
-        this.dataLang=dataLang;
+        this.dataAlbum=dataAlbum;
         this.dataAudio=dataAudio;
     }
 
     public Data()
     {
-
     }
 
     public String getDataTitle() {
         return dataTitle;
     }
 
-    public String getDataDesc() {
-        return dataDesc;
+    public String getDataArt() {
+        return dataArt;
     }
 
-    public String getDataLang() {
-        return dataLang;
+    public String getDataAlbum() {
+        return dataAlbum;
     }
 
     public String getDataImage() {

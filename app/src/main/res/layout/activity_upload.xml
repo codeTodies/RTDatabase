@@ -33,18 +33,19 @@
                 android:textColor="@color/lavender"
                 android:textSize="30sp" />
 
-            <ImageView
-                android:id="@+id/uploadImage"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SELECT FILE"
-                android:layout_gravity="center"
-                android:id="@+id/btnUploadFile"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginEnd="30dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/file"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT FILE"
+                    android:layout_gravity="center"
+                    android:id="@+id/btnUploadFile"/>
 
             <EditText
                 android:id="@+id/uploadTopic"
@@ -53,7 +54,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/lavender_border"
                 android:gravity="start|center_vertical"
-                android:hint="Enter topic name"
+                android:hint="Enter song name"
                 android:padding="16dp"
                 android:textColor="@color/lavender"
                 android:textSize="16sp" />
@@ -65,7 +66,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/lavender_border"
                 android:gravity="start|center_vertical"
-                android:hint="Enter description"
+                android:hint="Enter artist"
                 android:padding="16dp"
                 android:textColor="@color/lavender"
                 android:textSize="16sp" />
@@ -77,7 +78,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/lavender_border"
                 android:gravity="start|center_vertical"
-                android:hint="Enter language"
+                android:hint="Enter album"
                 android:padding="16dp"
                 android:textColor="@color/lavender"
                 android:textSize="16sp" />

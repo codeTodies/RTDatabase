@@ -7,6 +7,7 @@ android {
     namespace = "com.example.rtdatabase"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.rtdatabase"
         minSdk = 26
